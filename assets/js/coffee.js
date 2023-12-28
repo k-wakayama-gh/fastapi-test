@@ -1,3 +1,5 @@
+// scripts.js
+
 // Add any interactive behavior here
 // For example, smooth scrolling to sections on clicking links
 const navLinks = document.querySelectorAll('nav a');

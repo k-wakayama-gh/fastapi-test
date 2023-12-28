@@ -1,6 +1,6 @@
-/* styles.css */
+/* todos.css */
 
-/* ページ全体のスタイル */
+/* 共通のスタイル */
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f9f9f9;
@@ -21,6 +21,9 @@ h1 {
 #todo-list {
     list-style: none;
     padding: 0;
+    width: 100%; /* 幅を100%に設定 */
+    max-width: 600px; /* 最大幅を指定（PC上で適切な幅に調整） */
+    margin: 0 auto; /* 中央寄せ */
 }
 
 #todo-list li {
@@ -41,6 +44,9 @@ h1 {
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
+    width: 100%; /* 幅を100%に設定 */
+    max-width: 600px; /* 最大幅を指定（PC上で適切な幅に調整） */
+    margin: 0 auto; /* 中央寄せ */
 }
 
 #add-todo-form input[type="text"],
@@ -50,6 +56,8 @@ h1 {
     padding: 8px;
     border-radius: 5px;
     border: 1px solid #ccc;
+    width: 100%; /* 幅を100%に設定 */
+    box-sizing: border-box; /* ボックスモデルの設定 */
 }
 
 #add-todo-form button {
@@ -62,3 +70,28 @@ h1 {
 #add-todo-form button:hover {
     background-color: #45a049;
 }
+
+
+.hidden {
+    display: none;
+}
+
+
+footer {
+    width: 100%;
+    background-color: #333;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+
+/* レスポンシブデザイン */
+@media (min-width: 768px) {
+    /* PC向けのスタイル */
+    #todo-list,
+    #add-todo-form {
+        width: 50%; /* PCサイズ向けに幅を調整 */
+    }
+}
+

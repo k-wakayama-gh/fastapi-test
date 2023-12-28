@@ -5,7 +5,7 @@ from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, De
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import SQLModel, Session, select
-from typing import Optional, List, Annotated
+from typing import Optional, Annotated
 
 # my modules
 from database import engine, get_session
@@ -23,7 +23,7 @@ templates = Jinja2Templates(directory='templates')
 
 
 # create
-@router.post("/lessons", response_model = LessonRead, tags=["Lesson"])
+@router.post("/lessons", response_model=LessonRead, tags=["Lesson"])
 def create_lesson(*, session: Session = Depends(get_session), lesson: LessonCreate):
     db_lesson = Lesson.from_orm(lesson)
     session.add(db_lesson)
@@ -34,7 +34,7 @@ def create_lesson(*, session: Session = Depends(get_session), lesson: LessonCrea
 
 
 # read list
-@router.get("/lessons", response_model = List[LessonRead], tags=["Lesson"])
+@router.get("/lessons", response_model=list[LessonRead], tags=["Lesson"])
 def read_lessons_list(*, session: Session = Depends(get_session), offset: int = 0, limit: int = Query(default=100, le=100)):
     lessons = session.exec(select(Lesson).offset(offset).limit(limit)).all()
     if not lessons:
@@ -45,7 +45,7 @@ def read_lessons_list(*, session: Session = Depends(get_session), offset: int = 
 
 
 # read one
-@router.get("/lessons/{lesson_id}", response_model = LessonRead, tags=["Lesson"])
+@router.get("/lessons/{lesson_id}", response_model=LessonRead, tags=["Lesson"])
 def read_lesson(*, session: Session = Depends(get_session), lesson_id: int):
     lesson = session.get(Lesson, lesson_id)
     if not lesson:
@@ -55,7 +55,7 @@ def read_lesson(*, session: Session = Depends(get_session), lesson_id: int):
 
 
 # update
-@router.patch("/lessons/{lesson_id}", response_model = LessonRead, tags=["Lesson"])
+@router.patch("/lessons/{lesson_id}", response_model=LessonRead, tags=["Lesson"])
 def update_lesson(*, session: Session = Depends(get_session), lesson_id: int, lesson: LessonUpdate):
     db_lesson = session.get(Lesson, lesson_id)
     if not db_lesson:

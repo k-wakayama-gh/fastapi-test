@@ -35,6 +35,7 @@ class TodoRead(TodoBase):
 
 # update
 class TodoUpdate(TodoBase):
+    title: Optional[str]
     pass
 
 

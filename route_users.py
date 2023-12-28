@@ -5,7 +5,7 @@ from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, De
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import SQLModel, Session, select
-from typing import Optional, List, Annotated
+from typing import Optional, Annotated
 
 # my modules
 from database import engine, get_session
@@ -36,7 +36,7 @@ def create_user(*, session: Session = Depends(get_session), user: UserCreate):
 
 
 # read list
-@router.get("/users", response_model=List[UserRead], tags=["User"])
+@router.get("/users", response_model=list[UserRead], tags=["User"])
 def read_users_list(*, session: Session = Depends(get_session), offset: int = 0, limit: int = Query(default=100, le=100)):
     users = session.exec(select(User).offset(offset).limit(limit)).all()
     if not users:
@@ -60,6 +60,7 @@ def read_user(*, session: Session = Depends(get_session), user_id: int):
 @router.patch("/users/{user_id}", response_model=UserRead, tags=["User"])
 def update_user(*, session: Session = Depends(get_session), user_id: int, user: UserUpdate):
     db_user = session.get(User, user_id)
+    # same as: db_user = session.select(User).where(User.id == user_id)
     if not db_user:
         raise HTTPException(status_code=404, detail="Not found")
     user_data = user.model_dump(exclude_unset=True)

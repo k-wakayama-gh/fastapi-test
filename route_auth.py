@@ -1,12 +1,12 @@
 # --- route_auth.py ---
 
 # modules
-from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form
+from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, Depends, Query, Form, status
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlmodel import SQLModel, Session, select
-from typing import Optional, List, Annotated
+from typing import Optional, Annotated
 
 # my modules
 from database import engine, get_session
@@ -84,8 +84,8 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     user = fake_decode_token(token)
     if not user:
         raise HTTPException(
-            # status_code=status.HTTP_401_UNAUTHORIZED,
-            status_code=401,
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            # status_code=401,
             detail="Invalid authentication credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )

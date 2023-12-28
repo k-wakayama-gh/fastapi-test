@@ -5,7 +5,7 @@ from fastapi import FastAPI, APIRouter, Request, Header, Body, HTTPException, De
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import SQLModel, Session, select
-from typing import Optional, List, Annotated
+from typing import Optional, Annotated
 
 # my modules
 from database import engine, get_session
@@ -23,7 +23,7 @@ templates = Jinja2Templates(directory='templates')
 
 
 # create
-@router.post("/items", response_model = ItemRead, tags=["Item"])
+@router.post("/items", response_model=ItemRead, tags=["Item"])
 def create_item(*, session: Session = Depends(get_session), item: ItemCreate):
     #db_item = item => This doesnt work.
     #db_item = Item.model_validate(item) => requires SQLModel version above 0.0.14
@@ -37,7 +37,7 @@ def create_item(*, session: Session = Depends(get_session), item: ItemCreate):
 
 
 # read list
-@router.get("/items", response_model = List[ItemRead], tags=["Item"])
+@router.get("/items", response_model=list[ItemRead], tags=["Item"])
 def read_items_list(*, session: Session = Depends(get_session), offset: int = 0, limit: int = Query(default=100, le=100)):
     items = session.exec(select(Item).offset(offset).limit(limit)).all()
     if not items:
@@ -48,7 +48,7 @@ def read_items_list(*, session: Session = Depends(get_session), offset: int = 0,
 
 
 # read one
-@router.get("/items/{item_id}", response_model = ItemRead, tags=["Item"])
+@router.get("/items/{item_id}", response_model=ItemRead, tags=["Item"])
 def read_item(*, session: Session = Depends(get_session), item_id: int):
     item = session.get(Item, item_id)
     if not item:
@@ -58,7 +58,7 @@ def read_item(*, session: Session = Depends(get_session), item_id: int):
 
 
 # update
-@router.patch("/items/{item_id}", response_model = ItemRead, tags=["Item"])
+@router.patch("/items/{item_id}", response_model=ItemRead, tags=["Item"])
 def update_item(*, session: Session = Depends(get_session), item_id: int, item: ItemUpdate):
     db_item = session.get(Item, item_id)
     if not db_item:
