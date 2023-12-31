@@ -35,11 +35,13 @@ document.getElementById("add-todo-form").addEventListener("submit", function(eve
 
 
 
+
+
 // ToDoリスト内のToggle Statusボタンをクリックした時の処理
 document.querySelectorAll(".toggle-status-btn").forEach(button => {
     button.addEventListener("click", function(event) {
         const todoId = this.dataset.todoId; // ボタンに紐付けられたToDoのIDを取得
-        const currentIsDone = this.dataset.isDone === "true"; // 現在のis_doneの状態を取得
+        const currentIsDone = this.dataset.isDone === "True" ? true : false; // 現在のis_doneの状態を取得
 
         // FastAPIのエンドポイントにPATCHリクエストを送信してステータスをトグルする
         fetch(`/todos/${todoId}`, {

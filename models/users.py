@@ -1,7 +1,7 @@
 # --- models/users.py ---
 
 # modules
-from typing import Optional, List
+from typing import Optional
 from sqlmodel import SQLModel, Field, Relationship
 
 # models below 000000000000000000000
@@ -15,6 +15,8 @@ class UserBase(SQLModel):
     disabled: Optional[bool] = Field(default=False)
 
 
+
+# includes hashed password: never send this out
 class UserInDB(UserBase):
     hashed_password: str
 
@@ -23,6 +25,7 @@ class UserInDB(UserBase):
 # table
 class User(UserBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
+
 
 
 
@@ -47,4 +50,5 @@ class UserUpdate(UserBase):
 # delete
 class UserDelete(UserBase):
     pass
+
 

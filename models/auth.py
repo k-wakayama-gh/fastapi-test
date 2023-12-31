@@ -1,46 +1,19 @@
 # --- models/auth.py ---
 
 # modules
-from typing import Optional, List
+from typing import Optional
 from sqlmodel import SQLModel, Field, Relationship
 
 # models below 000000000000000000000
 
-
-# base model
-class AuthBase(SQLModel):
-    name: str = Field(index=True)
-    description: Optional[str] =Field(default=None, index=True)
-
+# token
+class Token(SQLModel):
+    access_token: str
+    token_type: str
 
 
-
-# table
-class Auth(AuthBase):
-    id: Optional[int] = Field(default=None, primary_key=True)
-
-
-
-# create
-class AuthCreate(AuthBase):
-    pass
-
-
-
-# read
-class AuthRead(AuthBase):
-    id: int
-
-
-
-# update
-class AuthUpdate(AuthBase):
-    pass
-
-
-
-# delete
-class AuthDelete(AuthBase):
-    pass
+# token data
+class TokenData(SQLModel):
+    username: Optional[str] = None
 
 

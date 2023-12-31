@@ -25,7 +25,7 @@ templates = Jinja2Templates(directory='templates')
 # create
 @router.post("/todos", response_model=TodoRead, tags=["Todo"])
 def create_todo(*, session: Session = Depends(get_session), todo: TodoCreate):
-    db_todo = Todo.from_orm(todo)
+    db_todo = Todo.model_validate(todo) # <= from_orm(...)
     session.add(db_todo)
     session.commit()
     session.refresh(db_todo)
@@ -36,14 +36,14 @@ def create_todo(*, session: Session = Depends(get_session), todo: TodoCreate):
 # display todos
 @router.get("/todos", response_class=HTMLResponse, tags=["html"], response_model=list[TodoRead])
 def display_todos(*, session: Session = Depends(get_session), offset: int = 0, limit: int = Query(default=100, le=100), request: Request):
-    todos = session.exec(select(Todo).offset(offset).limit(limit)).all() # Todo here must be a database table not TodoRead model
+    todos = session.exec(select(Todo).offset(offset).limit(limit)).all() # Todo here must be a database table: not TodoRead model
     if not todos:
         raise HTTPException(status_code=404, detail="Not found")
     context = {
         "request": request,
         "todos": todos,
     }
-    return templates.TemplateResponse("todos.html", context) # this context includes todo.id even if it is not displayed on html
+    return templates.TemplateResponse("todos.html", context) # this context includes todo.id even if it is not loaded in the html
 
 
 
@@ -81,7 +81,7 @@ def update_todo(
     if not db_todo:
         raise HTTPException(status_code=404, detail="Todo not found")
     
-    todo_data = todo_update.dict(exclude_unset=True)
+    todo_data = todo_update.model_dump(exclude_unset=True) # <= dict(...)
     for field, value in todo_data.items():
         setattr(db_todo, field, value)
     
