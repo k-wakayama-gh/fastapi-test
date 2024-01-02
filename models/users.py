@@ -9,7 +9,7 @@ from sqlmodel import SQLModel, Field, Relationship
 
 # base model
 class UserBase(SQLModel):
-    username: str = Field(index=True)
+    username: str = Field(unique=True, index=True)
     email: Optional[str] = Field(default=None)
     full_name: Optional[str] = Field(default=None)
     disabled: Optional[bool] = Field(default=False)
@@ -23,7 +23,7 @@ class UserInDB(UserBase):
 
 
 # table
-class User(UserBase, table=True):
+class User(UserInDB, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
 
 
@@ -38,6 +38,7 @@ class UserCreate(UserBase):
 # read
 class UserRead(UserBase):
     id: int
+    disabled: bool
 
 
 
