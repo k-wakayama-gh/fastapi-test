@@ -38,7 +38,6 @@ class UserCreate(UserBase):
 # read
 class UserRead(UserBase):
     id: int
-    disabled: bool
 
 
 

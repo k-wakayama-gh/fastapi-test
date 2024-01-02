@@ -77,7 +77,7 @@ def get_user(username: str):
 
 
 # argumentにsession: Session=Depends(get_session)を入れるやり方はあまりよくないかもしれない。
-# with Session...を使う場合のargumentは検索用のusernameひとつでいい。
+# with Session...を使う場合は、argumentは検索用のusernameひとつでいい。
 
 
 def authenticate_user(username: str, password: str):
@@ -141,16 +141,14 @@ async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,
 
 
 
-@router.get("/users/me", response_model=User)
+@router.get("/users/me", response_model=UserRead)
 async def read_users_me(current_user: Annotated[User, Depends(get_current_active_user)]):
     return current_user
 
 
 
 @router.get("/users/me/items/")
-async def read_own_items(
-    current_user: Annotated[User, Depends(get_current_active_user)]
-):
+async def read_own_items(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
     return [{"item_id": "Foo", "owner": current_user.username}]
 
 
