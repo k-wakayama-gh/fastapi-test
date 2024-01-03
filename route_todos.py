@@ -19,13 +19,20 @@ router = APIRouter()
 # templates settings
 templates = Jinja2Templates(directory='templates')
 
+class CommonQueryParams:
+    def __init__(self, q: Optional[str] = None, offset: int = 0, limit: int = Query(default=100, le=100)):
+        self.q = q
+        self.offset = offset
+        self.limit = limit
+
 # routes below 000000000000000000000000000000000000
+
 
 
 # create
 @router.post("/todos", response_model=TodoRead, tags=["Todo"])
 def create_todo(*, session: Session = Depends(get_session), todo: TodoCreate):
-    db_todo = Todo.model_validate(todo) # <= from_orm(...)
+    db_todo = Todo.model_validate(todo) # <= from_orm(...) on SQLModel version older than 0.0.14
     session.add(db_todo)
     session.commit()
     session.refresh(db_todo)
@@ -35,8 +42,8 @@ def create_todo(*, session: Session = Depends(get_session), todo: TodoCreate):
 
 # display todos
 @router.get("/todos", response_class=HTMLResponse, tags=["html"], response_model=list[TodoRead])
-def display_todos(*, session: Session = Depends(get_session), offset: int = 0, limit: int = Query(default=100, le=100), request: Request):
-    todos = session.exec(select(Todo).offset(offset).limit(limit)).all() # Todo here must be a database table: not TodoRead model
+def display_todos(session: Annotated[Session, Depends(get_session)], commons: Annotated[CommonQueryParams, Depends()], request: Request):
+    todos = session.exec(select(Todo).offset(commons.offset).limit(commons.limit)).all() # Todo here must be a database model i.e. table: not TodoRead model
     if not todos:
         raise HTTPException(status_code=404, detail="Not found")
     context = {
@@ -77,11 +84,11 @@ def update_todo(
     todo_update: TodoUpdate,
     session: Session = Depends(get_session)
 ):
-    db_todo = session.get(Todo, todo_id)
+    db_todo = session.get(Todo, todo_id)# todoテーブルをTodo.idで検索する
     if not db_todo:
         raise HTTPException(status_code=404, detail="Todo not found")
     
-    todo_data = todo_update.model_dump(exclude_unset=True) # <= dict(...)
+    todo_data = todo_update.model_dump(exclude_unset=True) # <= dict(...) on SQLModel version older than 0.0.14
     for field, value in todo_data.items():
         setattr(db_todo, field, value)
     

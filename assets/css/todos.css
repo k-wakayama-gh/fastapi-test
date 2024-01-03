@@ -13,7 +13,7 @@ body {
     min-height: 100vh;
 }
 
-h1 {
+h1, h2 {
     color: #333;
 }
 
@@ -78,11 +78,48 @@ h1 {
 
 
 footer {
+    margin-top: 30px;
     width: 100%;
     background-color: #333;
     color: white;
     padding: 20px 0;
     text-align: center;
+}
+
+
+button {
+    cursor: pointer;
+}
+
+
+.toggle-status-btn,
+.edit-btn,
+.delete-btn,
+.confirm-edit-btn,
+.cancel-edit-btn,
+.confirm-delete-btn,
+.cancel-edit-btn {
+    margin-right: 6px;
+}
+
+
+.edit-form input {
+    margin-top: 16px;
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%; /* 幅を100%に設定 */
+    box-sizing: border-box; /* ボックスモデルの設定 */
+}
+
+.edit-form textarea {
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%; /* 幅を100%に設定 */
+    box-sizing: border-box; /* ボックスモデルの設定 */
 }
 
 

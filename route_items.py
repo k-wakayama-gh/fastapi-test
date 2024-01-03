@@ -22,9 +22,18 @@ templates = Jinja2Templates(directory='templates')
 # routes below 000000000000000000000000000000000000
 
 
+class CommonQueryParams:
+    def __init__(self, q: Optional[str] = None, offset: int = 0, limit: int = Query(default=100, le=100)):
+        self.q = q
+        self.offset = offset
+        self.limit = limit
+
+
+
 # create
 @router.post("/items", response_model=ItemRead, tags=["Item"])
 def create_item(*, session: Session = Depends(get_session), item: ItemCreate):
+    # create_item(item: ItemCreate, session: Session = Depends(get_session)) 値持ちがあとなら*は不要
     #db_item = item => This doesnt work.
     #db_item = Item.model_validate(item) => requires SQLModel version above 0.0.14
     db_item = Item.from_orm(item)
@@ -37,9 +46,19 @@ def create_item(*, session: Session = Depends(get_session), item: ItemCreate):
 
 
 # read list
+# @router.get("/items", response_model=list[ItemRead], tags=["Item"])
+# def read_items_list(*, session: Session = Depends(get_session), offset: int = 0, limit: int = Query(default=100, le=100)):
+#     items = session.exec(select(Item).offset(offset).limit(limit)).all()
+#     if not items:
+#         raise HTTPException(status_code=404, detail="Not found")
+#     return items
+
+
+# read list
 @router.get("/items", response_model=list[ItemRead], tags=["Item"])
-def read_items_list(*, session: Session = Depends(get_session), offset: int = 0, limit: int = Query(default=100, le=100)):
-    items = session.exec(select(Item).offset(offset).limit(limit)).all()
+def read_items_list(commons: Annotated[CommonQueryParams, Depends(CommonQueryParams)], session: Annotated[Session, Depends(get_session)]):
+    #この場合はAnnotated[Any, Depends(CommonQueryParams)]でもAnnotated[CommonQueryParams, Depends()]でもいい
+    items = session.exec(select(Item).offset(commons.offset).limit(commons.limit)).all()
     if not items:
         raise HTTPException(status_code=404, detail="Not found")
     return items

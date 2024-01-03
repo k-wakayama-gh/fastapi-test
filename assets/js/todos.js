@@ -79,7 +79,7 @@ document.querySelectorAll(".edit-btn").forEach(button => {
         // todoElement.classList.add("hidden");
 
         const editForm = document.querySelector(`.edit-form[data-todo-id="${todoId}"]`);
-        editForm.classList.remove("hidden");
+        editForm.classList.toggle("hidden");
 
         // 編集用フォーム内のSaveボタンがクリックされた時の処理
         editForm.querySelector(".confirm-edit-btn").addEventListener("click", function() {
@@ -128,7 +128,7 @@ document.querySelectorAll(".delete-btn").forEach(button => {
 
         // 確認用ポップアップを表示
         const confirmationPopup = document.querySelector(`.confirmation-popup[data-todo-id="${todoId}"]`);
-        confirmationPopup.classList.remove("hidden");
+        confirmationPopup.classList.toggle("hidden");
 
         // 確認用ポップアップ内のConfirmボタンがクリックされた時の処理
         confirmationPopup.querySelector(".confirm-delete-btn").addEventListener("click", function() {

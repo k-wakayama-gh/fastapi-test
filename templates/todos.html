@@ -37,7 +37,7 @@
             </div>
             <!-- Editフォーム -->
             <div class="edit-form hidden" data-todo-id="{{ todo.id }}">
-                <input type="text" class="edit-title" placeholder="New Title">
+                <input type="text" class="edit-title" placeholder="New Title" required>
                 <textarea class="edit-content" placeholder="New Content"></textarea>
                 <button class="confirm-edit-btn">Save</button>
                 <button class="cancel-edit-btn">Cancel</button>
@@ -47,6 +47,7 @@
     </ul>
 
     <!-- 新しいToDoを追加するフォーム -->
+    <h2>Add a new ToDo</h2>
     <form id="add-todo-form" action="/todos" method="post">
         <input type="text" id="title" name="title" placeholder="Title" required>
         <textarea id="content" name="content" placeholder="Content"></textarea>
