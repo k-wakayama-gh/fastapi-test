@@ -22,7 +22,7 @@ h1, h2 {
     list-style: none;
     padding: 0;
     width: 100%; /* 幅を100%に設定 */
-    max-width: 600px; /* 最大幅を指定（PC上で適切な幅に調整） */
+    /* max-width: 600px; /* 最大幅を指定（PC上で適切な幅に調整） */
     margin: 0 auto; /* 中央寄せ */
 }
 
@@ -45,7 +45,7 @@ h1, h2 {
     align-items: center;
     margin-top: 20px;
     width: 100%; /* 幅を100%に設定 */
-    max-width: 600px; /* 最大幅を指定（PC上で適切な幅に調整） */
+    /* max-width: 600px; /* 最大幅を指定（PC上で適切な幅に調整） */
     margin: 0 auto; /* 中央寄せ */
 }
 
@@ -128,7 +128,7 @@ button {
     /* PC向けのスタイル */
     #todo-list,
     #add-todo-form {
-        width: 50%; /* PCサイズ向けに幅を調整 */
+        width: 40%; /* PCサイズ向けに幅を調整 */
     }
 }
 
