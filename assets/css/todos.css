@@ -4,16 +4,21 @@
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f9f9f9;
-    margin: 0 2vh;
+    margin: 0 1vh;
     padding: 0;
     /* align-items: center; */
     /* justify-content: center; */
-    min-height: 100vh;
+    font-size: medium;
 }
 
 h1, h2 {
     color: #333;
     text-align: center;
+}
+
+input,
+textarea {
+    font-size: medium;
 }
 
 ul {
