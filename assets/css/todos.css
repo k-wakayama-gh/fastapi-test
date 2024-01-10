@@ -9,6 +9,7 @@ body {
     /* align-items: center; */
     /* justify-content: center; */
     font-size: medium;
+    overflow-y: scroll;
 }
 
 h1, h2 {
