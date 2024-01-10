@@ -1,0 +1,5 @@
+volumes:
+  type: volume
+  source: database
+  target: ./database
+  name: database

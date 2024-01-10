@@ -39,12 +39,12 @@ document.getElementById("add-todo-form").addEventListener("submit", function(eve
 
 // ToDoリスト内のToggle Statusボタンをクリックした時の処理
 document.querySelectorAll(".toggle-status-btn").forEach(button => {
-    button.addEventListener("click", function(event) {
+    button.addEventListener("click", async function(event) {
         const todoId = this.dataset.todoId; // ボタンに紐付けられたToDoのIDを取得
         const currentIsDone = this.dataset.isDone === "True" ? true : false; // 現在のis_doneの状態を取得
 
         // FastAPIのエンドポイントにPATCHリクエストを送信してステータスをトグルする
-        fetch(`/todos/${todoId}`, {
+        await fetch(`/todos/${todoId}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json"
@@ -158,5 +158,42 @@ document.querySelectorAll(".delete-btn").forEach(button => {
 });
 
 
+
+
+// ログインフォーム
+const loginForm = document.getElementById('login-form');
+loginForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    
+    const formData = new FormData(loginForm);
+    const username = formData.get('username');
+    const password = formData.get('password');
+
+    const response = await fetch('/token', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `username=${username}&password=${password}`,
+    });
+
+    if (response.ok) {
+        const { access_token } = await response.json();
+        // トークンをlocalStorageなどに保存
+        localStorage.setItem('accessToken', access_token);
+        alert('ログイン成功');
+    } else {
+        alert('ログイン失敗');
+    }
+});
+
+
+// ログアウト
+const logoutBtn = document.getElementById('logout-btn');
+logoutBtn.addEventListener('click', async (event) => {
+    event.preventDefault();
+    localStorage.removeItem('accessToken');
+    }
+);
 
 
