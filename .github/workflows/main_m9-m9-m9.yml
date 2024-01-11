@@ -66,4 +66,4 @@ jobs:
         with:
           app-name: 'm9-m9-m9'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_540FC61908AF4B6C9278B9702E5025A9 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7FC15103C829443BAD67254C4B29A481 }}
