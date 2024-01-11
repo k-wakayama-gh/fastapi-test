@@ -120,7 +120,7 @@ async def read_own_todos(current_user: Annotated[UserRead, Depends(get_current_a
 
 
 
-@router.get("add-row")
+@router.get("/add-row")
 def add_row():
     add_row()
     return {"msg": "add row done"}
