@@ -4,15 +4,14 @@
 from sqlmodel import SQLModel, create_engine, Session
 import os
 
-volume_path = "/code/volume1"
-
-if not os.path.exists(volume_path):
-    os.makedirs(volume_path)
-
+if os.path.isdir("volume1"):
+    db_file = 'sqlite:///volume1/database.sqlite'
+else:
+    db_file = 'sqlite:///database.sqlite'
 
 
 # database settings
-engine = create_engine('sqlite:///volume1_database.sqlite', echo=False, connect_args={'check_same_thread': False})
+engine = create_engine(db_file, echo=False, connect_args={'check_same_thread': False})
 
 # def : create the database
 def create_database():
