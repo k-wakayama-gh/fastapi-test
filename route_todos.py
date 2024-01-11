@@ -12,7 +12,6 @@ from database import engine, get_session
 from models.todos import Todo, TodoCreate, TodoRead, TodoUpdate, TodoDelete
 from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete
 from route_auth import get_current_active_user
-from add_row import add_rows
 
 # FastAPI instance and API router
 app = FastAPI()
@@ -120,7 +119,3 @@ async def read_own_todos(current_user: Annotated[UserRead, Depends(get_current_a
 
 
 
-@router.get("/add-row")
-def add_row():
-    add_rows()
-    return {"msg": "add row done"}
