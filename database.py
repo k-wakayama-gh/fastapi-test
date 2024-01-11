@@ -4,7 +4,10 @@
 from sqlmodel import SQLModel, create_engine, Session
 import os
 
-if os.path.isdir("volume1"):
+
+volume1_foler = os.path.join(os.getcwd(), "volume1")
+
+if os.path.isdir(volume1_foler):
     db_file = 'sqlite:///volume1/database.sqlite'
 else:
     db_file = 'sqlite:///database.sqlite'
