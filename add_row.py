@@ -6,7 +6,7 @@ from sqlmodel import SQLModel, Session, select
 from database import engine
 from models import items, users, lessons, todos
 
-def add_row():
+def add_rows():
     session = Session(engine)
     
     
@@ -28,6 +28,6 @@ def add_row():
     
     session.close()
 
-add_row()
+add_rows()
 
 
