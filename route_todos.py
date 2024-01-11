@@ -11,6 +11,8 @@ from typing import Optional, Annotated
 from database import engine, get_session
 from models.todos import Todo, TodoCreate, TodoRead, TodoUpdate, TodoDelete
 from models.users import User, UserCreate, UserRead, UserUpdate, UserDelete
+from route_auth import get_current_active_user
+from add_row import add_row
 
 # FastAPI instance and API router
 app = FastAPI()
@@ -31,7 +33,7 @@ class CommonQueryParams:
 
 # create
 @router.post("/todos", response_model=TodoRead, tags=["Todo"])
-def create_todo(*, session: Session = Depends(get_session), todo: TodoCreate):
+async def create_todo(session: Annotated[Session, Depends(get_session)], todo: TodoCreate):
     db_todo = Todo.model_validate(todo) # <= from_orm(...) on SQLModel version older than 0.0.14
     session.add(db_todo)
     session.commit()
@@ -42,7 +44,7 @@ def create_todo(*, session: Session = Depends(get_session), todo: TodoCreate):
 
 # display todos
 @router.get("/todos", response_class=HTMLResponse, tags=["html"], response_model=list[TodoRead])
-def display_todos(session: Annotated[Session, Depends(get_session)], commons: Annotated[CommonQueryParams, Depends()], request: Request):
+async def display_todos(session: Annotated[Session, Depends(get_session)], commons: Annotated[CommonQueryParams, Depends()], request: Request):
     todos = session.exec(select(Todo).offset(commons.offset).limit(commons.limit)).all() # Todo here must be a database model i.e. table: not TodoRead model
     if not todos:
         raise HTTPException(status_code=404, detail="Not found")
@@ -79,7 +81,7 @@ def read_todo(*, session: Session = Depends(get_session), todo_id: int):
 
 # update
 @router.patch("/todos/{todo_id}", response_model=TodoRead, tags=["Todo"])
-def update_todo(
+async def update_todo(
     todo_id: int,
     todo_update: TodoUpdate,
     session: Session = Depends(get_session)
@@ -102,12 +104,23 @@ def update_todo(
 
 # delete
 @router.delete("/todos/{todo_id}", tags=["Todo"])
-def delete_todo(*, session: Session = Depends(get_session), todo_id: int):
+async def delete_todo(session: Annotated[Session, Depends(get_session)], todo_id: int):
     todo = session.get(Todo, todo_id)
     if not todo:
         raise HTTPException(status_code=404, detail="Not found")
     session.delete(todo)
     session.commit()
-    return {"ok": True}
+    return {"deleted": todo}
 
 
+
+@router.get("/users/me/todos")
+async def read_own_todos(current_user: Annotated[UserRead, Depends(get_current_active_user)]):
+    return [{"item_id": "Foo", "owner": current_user.username}]
+
+
+
+@router.get("add-row")
+def add_row():
+    add_row()
+    return {"msg": "add row done"}

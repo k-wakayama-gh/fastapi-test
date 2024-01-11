@@ -2,9 +2,17 @@
 
 # modules
 from sqlmodel import SQLModel, create_engine, Session
+from pathlib import Path
+
+volume = Path("./volume-1")
+
+if volume.exists():
+    db_file = 'sqlite:///volume-1/database.sqlite'
+else:
+    db_file = 'sqlite:///database.sqlite'
 
 # database settings
-engine = create_engine('sqlite:///database.sqlite', echo=True, connect_args={'check_same_thread': False})
+engine = create_engine(db_file, echo=False, connect_args={'check_same_thread': False})
 
 # def : create the database
 def create_database():
